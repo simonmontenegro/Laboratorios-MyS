@@ -43,12 +43,17 @@ grid on %Muestra el grafico con grilla
 
 
 % Pregunta 2
-arregloStr = input("Ingrese un arreglo (separado por espaciados) para calcular su desviación estándar: ");
-arreglo = num2str(arregloStr);
+arreglo = input("Ingrese un arreglo (entre corchetes y separado por espacios) para calcular su desviación estándar: ");
+%arreglo = num2str(arregloStr);
 
 sumatoria = 0;
-promedio = mean(arreglo);
-for elmento = 1:length(arreglo)
+promedio = 0;
+for elemento = 1:length(arreglo)
+    promedio = promedio + arreglo(elemento);
+end
+promedio = promedio/length(arreglo);
+
+for elemento = 1:length(arreglo)
     sumatoria = sumatoria + (arreglo(elemento) - promedio)^2;
 end
 
