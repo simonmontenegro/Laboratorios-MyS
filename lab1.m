@@ -2,8 +2,6 @@
 % Simón Montenegro 197947217
 
 % ----- Primera parte -----
-% ------------------------------------------FALTA GRAFICAR EN CONJUNTO LA A
-% Y B
 % Pregunta 1
 % a(x) = 6log4(5x + 15) − log2(2x)
 x = 0: .01: 15*pi;
@@ -14,6 +12,9 @@ graficar(fa, x, "Función 1", "Eje x", "Eje y", "r * ");
 fb = sin(6*log10(2*x + 9)) + cos(2*log(x + 16));
 graficar(fb, x, "Función 2", "Eje x", "Eje y", "g + ");
 
+%Grafica de a(x) y b(x)
+graficarCombinado(fa, fb, x, "Funciones 1 y 2", "Eje x", "Eje y", "r * ", "g + ")
+
 % Pregunta 2
 % c(x) = 2e(2x+3)
 % Escala normal
@@ -23,6 +24,16 @@ graficarNormal(fc, x2, "Función 3 (escala normal)", "Eje x", "Eje y")
 
 % Escala logaritmica
 graficarLogaritmica(fc, x2, "Función 3 (escala logaritmica)", "Eje x", "Eje y")
+
+
+
+
+
+
+
+
+
+
 
 % ----- Segunda parte -----
 
