@@ -38,7 +38,8 @@ graficarLogaritmica(fc, x2, "Función 3 (escala logaritmica)", "Eje x", "Eje y")
 % ----- Segunda parte -----
 
 % Pregunta 1
-
+f = [3, 4, 1, -15];
+solucion = newtonRaphson(f, 3, 0.0001, 2);
 
 % Pregunta 2
 %arreglo = input("Ingrese un arreglo (entre corchetes y separado por espacios) para calcular su desviación estándar: ");
