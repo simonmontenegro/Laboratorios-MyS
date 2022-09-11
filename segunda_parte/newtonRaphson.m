@@ -7,7 +7,7 @@ function [solucion] = newtonRaphson(f, iteracion, error, x0)
 
     x1 = x0 - imagen/imagen_df;
 
-    nuevo_error = abs(x1 -x0);
+    nuevo_error = abs(x1 - x0);
 
     if(iteracion == 0 || nuevo_error < error)
         solucion = x1;

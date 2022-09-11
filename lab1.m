@@ -26,36 +26,20 @@ graficarNormal(fc, x2, "Función 3 (escala normal)", "Eje x", "Eje y")
 graficarLogaritmica(fc, x2, "Función 3 (escala logaritmica)", "Eje x", "Eje y")
 
 
-
-
-
-
-
-
-
-
-
 % ----- Segunda parte -----
 
 % Pregunta 1
-f = [3, 4, 1, -15];
-solucion = newtonRaphson(f, 3, 0.0001, 2);
+f = input("Ingrese un arreglo (entre corchetes y separado por comas) que represente el polinomio: ");
+iter = input("Ingrese el número de iteraciones permitidas: ");
+error = input("Ingrese el error: ");
+x0 = input("Ingrese el valor inicial: ");
+solucion = newtonRaphson(f, iter, error, x0);
+disp("La solución aproximada es: " + string(solucion));
 
 % Pregunta 2
-%arreglo = input("Ingrese un arreglo (entre corchetes y separado por espacios) para calcular su desviación estándar: ");
-%arreglo = num2str(arregloStr);
+arreglo = input("Ingrese un arreglo (entre corchetes y separado por comas) para calcular su desviación estándar: ");
+desv = std(arreglo);
+disp("La desviación estándar del arreglo ingresado es: " + string(desv));
 
-% sumatoria = 0;
-% promedio = 0;
-% for elemento = 1:length(arreglo)
-%     promedio = promedio + arreglo(elemento);
-% end
-% promedio = promedio/length(arreglo);
-% 
-% for elemento = 1:length(arreglo)
-%     sumatoria = sumatoria + (arreglo(elemento) - promedio)^2;
-% end
-% 
-% std = sqrt((sumatoria)/length(arreglo));
-% disp("La desviacióne estándar del arreglo ingresado es: " + string(std));
+
 
