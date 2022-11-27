@@ -9,7 +9,7 @@ D = [0;0];
 
 %Se utiliza la función mab (Parte1) para obtener la función de
 %transferencia del sistema
-H = mab(A, B, C, D);
+H = ss(A, B, C, D);
 
 %Se declara la entrada u(t) (enunciado)
 t = linspace (0 , 12*pi , 5000);
