@@ -20,10 +20,10 @@ void setup() {
   int cantidad_pajaros = 10;
   // Add an initial set of boids into the system
   for (int i = 0; i < cantidad_pajaros; i++) {
-    flock.addBoid(new Boid(width/2,height/2, white));
+    flock.addBoid(new Boid(width/2,height/2, blue));
   }
   //Aqui debería setear al lider de manera distinta a la bandada.
-  flock.addBoid(new Boid(width/2,height/2, red));
+  flock.addLeader(new Leader(width/2 + 20,height/2 + 20, red));
 }
 
 void draw() {
@@ -33,10 +33,12 @@ void draw() {
 }
 
 // Add a new boid into the System
+
 void mousePressed() {
   flock.addBoid(new Boid(mouseX,mouseY, blue));
 }
-
+/*
 void keyPressed() {
   flock.addBoid(new Boid(mouseX,mouseY, red));
 }
+*/

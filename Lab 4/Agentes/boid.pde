@@ -18,7 +18,7 @@ class Boid {
 
     // Leaving the code temporarily this way so that this example runs in JS
     float angle = random(TWO_PI);
-    velocity = new PVector(cos(angle), sin(angle));
+    velocity = new PVector(cos(angle), sin(angle)); //velocity = new PVector(10, -5); //(mov en x; mov en y)-> x+ derecha; y+ abajo
 
     position = new PVector(x, y);
     r = 2.0;
@@ -26,12 +26,16 @@ class Boid {
     maxforce = 0.03;
     pred = col;
   }
+  
+  PVector getPosition(){
+    return this.position;
+  }
 
-  void run(ArrayList<Boid> boids) {
-    flock(boids);
-    update();
-    borders();
-    render(pred);
+  void run(ArrayList<Boid> boids, ArrayList<Leader> leaders) {
+    flock(boids, leaders);    //Actualiza los boids, con cohesion, separacion y alineamiento; apl
+    update();        //Actualiza la posicion en base a la velocidad y la aceleracion
+    borders();       //Mundo circular
+    render(pred);    //Dibuja los triangulos
   }
 
   void applyForce(PVector force) {
@@ -40,18 +44,27 @@ class Boid {
   }
 
   // We accumulate a new acceleration each time based on three rules
-  void flock(ArrayList<Boid> boids) {
+  void flock(ArrayList<Boid> boids, ArrayList<Leader> leaders) {
+    PVector follow = followLeader(leaders);
     PVector sep = separate(boids);   // Separation
     PVector ali = align(boids);      // Alignment
     PVector coh = cohesion(boids);   // Cohesion
+    print("Cohesion: ", coh.mag(), "\n");
+    
+    
+    
     // Arbitrarily weight these forces
-    sep.mult(1.5);
+    follow.mult(1.0);
+    sep.mult(2.0);
     ali.mult(1.0);
-    coh.mult(1.0);
+    coh.mult(1.5);
+    
+    
     // Add the force vectors to acceleration
     applyForce(sep);
     applyForce(ali);
     applyForce(coh);
+    applyForce(follow);
   }
 
   // Method to update position
@@ -70,7 +83,7 @@ class Boid {
   PVector seek(PVector target) {
     PVector desired = PVector.sub(target, position);  // A vector pointing from the position to the target
     // Scale to maximum speed
-    desired.normalize();
+    desired.normalize();        //Normaliza el vector objetivo (raiz de la suma de cuadrados de las coordenadas)
     desired.mult(maxspeed);
 
     // Above two lines of code below could be condensed with new PVector setMag() method
@@ -79,7 +92,8 @@ class Boid {
 
     // Steering = Desired minus Velocity
     PVector steer = PVector.sub(desired, velocity);
-    steer.limit(maxforce);  // Limit to maximum steering force
+    steer.limit(maxforce);  // Limit lo que hace es setear la magnitud del vector en MaxForce, es decir
+                            // la raiz de la suma de los cuadrados es igual a maxForce
     return steer;
   }
 
@@ -87,16 +101,16 @@ class Boid {
     // Draw a triangle rotated in the direction of velocity
     float theta = velocity.heading2D() + radians(90);
     // heading2D() above is now heading() but leaving old syntax until Processing.js catches up
-    
+
     fill(c);
     stroke(c);
     pushMatrix();
     translate(position.x, position.y);
     rotate(theta);
-    beginShape(TRIANGLES);
-    vertex(0, -r*2);
-    vertex(-r, r*2);
-    vertex(r, r*2);
+    beginShape(TRIANGLES);    //AQUI SE DEFINEN LOS VERTICES DEL TRIANGULO
+    vertex(0, -r*2);         //Vertice superior
+    vertex(-r, r*2);          //Vertice inferior izq
+    vertex(r, r*2);           //Vertice inferior der
     endShape();
     popMatrix();
   }
@@ -112,7 +126,7 @@ class Boid {
   // Separation
   // Method checks for nearby boids and steers away
   PVector separate (ArrayList<Boid> boids) {
-    float desiredseparation = 25.0f;
+    float desiredseparation = 25.0f;          //separacion deseada
     PVector steer = new PVector(0, 0, 0);
     int count = 0;
     // For every boid in the system, check if it's too close
@@ -173,8 +187,7 @@ class Boid {
       PVector steer = PVector.sub(sum, velocity);
       steer.limit(maxforce);
       return steer;
-    } 
-    else {
+    } else {
       return new PVector(0, 0);
     }
   }
@@ -182,22 +195,29 @@ class Boid {
   // Cohesion
   // For the average position (i.e. center) of all nearby boids, calculate steering vector towards that position
   PVector cohesion (ArrayList<Boid> boids) {
-    float neighbordist = 50;
+    float neighbordist = 50;           //Corresponde al radio de deteccion de vecinos cercanos
     PVector sum = new PVector(0, 0);   // Start with empty vector to accumulate all positions
     int count = 0;
     for (Boid other : boids) {
-      float d = PVector.dist(position, other.position);
-      if ((d > 0) && (d < neighbordist)) {
+      float d = PVector.dist(position, other.position);  //Calcula la distancia que hay entre el boid actual y el resto 
+                                                         // de boids
+      if ((d > 0) && (d < neighbordist)) {               //d == 0 es cuando 'es el mismo'; cuando es menor que el radio de
+                                                         // deteccion
         sum.add(other.position); // Add position
         count++;
       }
     }
     if (count > 0) {
-      sum.div(count);
-      return seek(sum);  // Steer towards the position
-    } 
-    else {
+      sum.div(count);    
+      return seek(sum);  // Devuelve el vector resultante de movimiento, es decir, hacia donde es mi siguiente paso
+                         // con velocidad acotada (para que todos los movimientos sean iguales)
+    } else {
       return new PVector(0, 0);
     }
+  }
+  
+  PVector followLeader(ArrayList<Leader> leaders){
+    Leader l = leaders.get(0);  
+    return seek(l.getPosition());
   }
 }
