@@ -5,23 +5,27 @@ class Leader extends Boid {
   
   Leader(float x, float y, color col) {
     super(x, y, col);
-    velocity = sinusoidalMove().mult(10);
+    //velocity = sinusoidalMove();
     //float angle = random(TWO_PI);
     //velocity = new PVector(0, 10);
-    maxspeed = 4.0;
+    maxspeed = 1.0;
   }
   
-  PVector sinusoidalMove(){
-    float x_move = random(TWO_PI);
-    float y_move = 2.8 * sin(0.64*x_move) + 0.14*pow(x_move,2) + 1.13;
-    print(x_move, y_move, "\n");
+  float sinusoidalMove(float x_move){
+    //float x_move = random(TWO_PI);
+    //float y_move = 2.8 * sin(0.64*x_move) + 0.14*pow(x_move,2) + 1.13;
+    float y_move = 10*sin(x_move);
     PVector newVelocity = new PVector(x_move, y_move);
-    return newVelocity;
+    acceleration.add(newVelocity);
+    x_move = x_move + 0.01;
+    return x_move;
   }
   
-  void runLeader() {
+  float runLeader(float x_move) {
+    x_move = sinusoidalMove(x_move);
     update();
     borders();
     render(pred);
+    return x_move;
   }
 }

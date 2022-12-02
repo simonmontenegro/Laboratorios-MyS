@@ -22,7 +22,7 @@ class Boid {
 
     position = new PVector(x, y);
     r = 2.0;
-    maxspeed = 2;
+    maxspeed = 1.0;
     maxforce = 0.03;
     pred = col;
   }
@@ -48,16 +48,16 @@ class Boid {
     PVector follow = followLeader(leaders);
     PVector sep = separate(boids);   // Separation
     PVector ali = align(boids);      // Alignment
-    PVector coh = cohesion(boids);   // Cohesion
-    print("Cohesion: ", coh.mag(), "\n");
+    PVector coh = cohesion(boids, leaders);   // Cohesion
+    //print("Cohesion: ", coh.mag(), "\n");
     
     
     
     // Arbitrarily weight these forces
-    follow.mult(1.0);
     sep.mult(2.0);
+    follow.mult(1.0);
     ali.mult(1.0);
-    coh.mult(1.5);
+    coh.mult(1.0);
     
     
     // Add the force vectors to acceleration
@@ -194,10 +194,14 @@ class Boid {
 
   // Cohesion
   // For the average position (i.e. center) of all nearby boids, calculate steering vector towards that position
-  PVector cohesion (ArrayList<Boid> boids) {
+  PVector cohesion (ArrayList<Boid> boids, ArrayList<Leader> leaders) {
     float neighbordist = 50;           //Corresponde al radio de deteccion de vecinos cercanos
     PVector sum = new PVector(0, 0);   // Start with empty vector to accumulate all positions
     int count = 0;
+    
+    Leader l = leaders.get(0); 
+    PVector leaderPosition = l.getPosition();
+    
     for (Boid other : boids) {
       float d = PVector.dist(position, other.position);  //Calcula la distancia que hay entre el boid actual y el resto 
                                                          // de boids
@@ -208,7 +212,8 @@ class Boid {
       }
     }
     if (count > 0) {
-      sum.div(count);    
+      sum.add(leaderPosition);
+      sum.div(count+1);    
       return seek(sum);  // Devuelve el vector resultante de movimiento, es decir, hacia donde es mi siguiente paso
                          // con velocidad acotada (para que todos los movimientos sean iguales)
     } else {
@@ -217,7 +222,24 @@ class Boid {
   }
   
   PVector followLeader(ArrayList<Leader> leaders){
-    Leader l = leaders.get(0);  
-    return seek(l.getPosition());
+    Leader l = leaders.get(0); 
+    PVector leaderPosition = l.getPosition();
+    return seek(leaderPosition);
   }
 }
+
+
+/*
+PVector followLeader(ArrayList<Leader> leaders){
+    float neighbordist = 80;
+    Leader l = leaders.get(0); 
+    PVector leaderPosition = l.getPosition();
+    float d = PVector.dist(position, leaderPosition);
+    
+    if(d < neighbordist){
+      return seek(leaderPosition);
+    }else {
+      return new PVector(0, 0);
+    }
+  }
+*/

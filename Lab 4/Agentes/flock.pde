@@ -1,6 +1,7 @@
 class Flock {
   ArrayList<Boid> boids; // An ArrayList for all the boids
   ArrayList<Leader> leaders;
+  float x = 0;
   
   Flock() {
     boids = new ArrayList<Boid>(); // Initialize the ArrayList
@@ -9,7 +10,7 @@ class Flock {
 
   void run() {
     for (Leader l : leaders){
-      l.runLeader();
+      x = l.runLeader(x);
     }
     for (Boid b : boids) {
       b.run(boids, leaders);  // Passing the entire list of boids to each boid individually
