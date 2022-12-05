@@ -1,6 +1,6 @@
 /**
  * Flocking 
- * by Daniel Shiffman.  
+ * by Maria Jesus Cañoles 20300159-2 y Simon Montenegro 19794721-7  
  * 
  * An implementation of Craig Reynold's Boids program to simulate
  * the flocking behavior of birds. Each boid steers itself based on 

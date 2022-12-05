@@ -12,9 +12,7 @@ class Leader extends Boid {
   }
   
   float sinusoidalMove(float x_move){
-    //float x_move = random(TWO_PI);
-    //float y_move = 2.8 * sin(0.64*x_move) + 0.14*pow(x_move,2) + 1.13;
-    float y_move = 10*sin(x_move);
+    float y_move = 2.8 * sin(0.64*x_move) + 0.14*pow(x_move,2) + 1.13;
     PVector newVelocity = new PVector(x_move, y_move);
     acceleration.add(newVelocity);
     x_move = x_move + 0.01;
